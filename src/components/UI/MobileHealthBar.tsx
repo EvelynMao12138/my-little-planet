@@ -1,4 +1,4 @@
-import { Droplets, Leaf, PawPrint, Sparkles, Sun } from 'lucide-react';
+import { Droplets, Leaf, PawPrint, Sparkles, Sun, ChevronUp } from 'lucide-react';
 import { usePlanetStore } from '@/contexts/PlanetContext';
 import { getStatusColor } from '@/utils/helpers';
 
@@ -10,7 +10,11 @@ const categories = [
   { key: 'energy', label: 'Energy', icon: <Sun className="w-3 h-3" />, color: '#fbbf24' },
 ];
 
-export function MobileHealthBar() {
+interface MobileHealthBarProps {
+  onExpand?: () => void;
+}
+
+export function MobileHealthBar({ onExpand }: MobileHealthBarProps) {
   const { health } = usePlanetStore();
   const overallColor = getStatusColor(health.overall);
 

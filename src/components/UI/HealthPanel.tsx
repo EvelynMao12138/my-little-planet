@@ -90,6 +90,7 @@ export function HealthPanel() {
           <div>• High energy evaporates water</div>
           <div>• Animals need plants + cleanliness</div>
           <div>• Buildings reduce cleanliness</div>
+          <div>• Too much vegetation drives animals away</div>
         </div>
       </div>
     </div>

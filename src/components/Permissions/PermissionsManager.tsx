@@ -76,14 +76,14 @@ export function PermissionsManager() {
   if (!showPermissionBanner) return null;
 
   return (
-    <div className="fixed top-4 left-1/2 -translate-x-1/2 z-50 animate-fadeIn">
-      <div className="bg-gradient-to-r from-gray-900/95 to-gray-800/95 backdrop-blur-lg rounded-2xl border border-white/20 shadow-2xl p-4 max-w-lg">
-        <div className="flex items-start gap-4">
-          <div className="flex gap-3">
+    <div className="fixed top-2 sm:top-4 left-2 sm:left-1/2 sm:-translate-x-1/2 right-2 sm:right-auto z-50 animate-fadeIn">
+      <div className="bg-gradient-to-r from-gray-900/95 to-gray-800/95 backdrop-blur-lg rounded-xl sm:rounded-2xl border border-white/20 shadow-2xl p-3 sm:p-4">
+        <div className="flex items-start gap-2 sm:gap-4">
+          <div className="flex gap-2 sm:gap-3">
             {/* Camera Status */}
             <button
               onClick={requestCamera}
-              className={`flex flex-col items-center gap-1 p-3 rounded-xl transition-all ${
+              className={`flex flex-col items-center gap-0.5 sm:gap-1 p-2 sm:p-3 rounded-xl transition-all ${
                 permissions.camera === 'granted' 
                   ? 'bg-green-500/30 ring-2 ring-green-400' 
                   : permissions.camera === 'denied'
@@ -91,22 +91,22 @@ export function PermissionsManager() {
                   : 'bg-white/10 hover:bg-white/20'
               }`}
             >
-              <Camera className={`w-6 h-6 ${
+              <Camera className={`w-5 h-5 sm:w-6 sm:h-6 ${
                 permissions.camera === 'granted' ? 'text-green-400' 
                 : permissions.camera === 'denied' ? 'text-red-400' 
                 : 'text-white/60'
               }`} />
-              <span className="text-[10px] font-medium">
-                {permissions.camera === 'granted' ? 'Camera ✓' 
-                 : permissions.camera === 'denied' ? 'Camera ✗'
-                 : 'Camera'}
+              <span className="text-[8px] sm:text-[10px] font-medium">
+                {permissions.camera === 'granted' ? '✓' 
+                 : permissions.camera === 'denied' ? '✗'
+                 : ''}
               </span>
             </button>
 
             {/* Microphone Status */}
             <button
               onClick={requestMicrophone}
-              className={`flex flex-col items-center gap-1 p-3 rounded-xl transition-all ${
+              className={`flex flex-col items-center gap-0.5 sm:gap-1 p-2 sm:p-3 rounded-xl transition-all ${
                 permissions.microphone === 'granted' 
                   ? 'bg-green-500/30 ring-2 ring-green-400' 
                   : permissions.microphone === 'denied'
@@ -114,49 +114,49 @@ export function PermissionsManager() {
                   : 'bg-white/10 hover:bg-white/20'
               }`}
             >
-              <Mic className={`w-6 h-6 ${
+              <Mic className={`w-5 h-5 sm:w-6 sm:h-6 ${
                 permissions.microphone === 'granted' ? 'text-green-400' 
                 : permissions.microphone === 'denied' ? 'text-red-400' 
                 : 'text-white/60'
               }`} />
-              <span className="text-[10px] font-medium">
-                {permissions.microphone === 'granted' ? 'Mic ✓' 
-                 : permissions.microphone === 'denied' ? 'Mic ✗'
-                 : 'Mic'}
+              <span className="text-[8px] sm:text-[10px] font-medium">
+                {permissions.microphone === 'granted' ? '✓' 
+                 : permissions.microphone === 'denied' ? '✗'
+                 : ''}
               </span>
             </button>
           </div>
 
           <div className="flex-1">
             <h3 className="text-sm font-medium text-white mb-1">Enable Features</h3>
-            <p className="text-xs text-white/60 leading-relaxed">
+            <p className="text-xs text-white/60 leading-relaxed hidden sm:block">
               Click each button to grant permissions for:
             </p>
             <div className="flex gap-2 mt-1.5">
               <span className="text-[10px] px-2 py-0.5 bg-cyan-500/20 text-cyan-300 rounded-full">
-                🎥 Camera for hand tracking
+                🎥 Camera
               </span>
               <span className="text-[10px] px-2 py-0.5 bg-purple-500/20 text-purple-300 rounded-full">
-                🎤 Mic for voice commands
+                🎤 Mic
               </span>
             </div>
             
             {anyDenied && (
               <div className="flex items-center gap-1 mt-2 text-[10px] text-red-400">
                 <AlertCircle className="w-3 h-3" />
-                Some permissions denied - features may not work
+                Some denied - features may not work
               </div>
             )}
           </div>
 
-          {bothGranted && (
-            <button
-              onClick={() => setShowPermissionBanner(false)}
-              className="p-1.5 rounded-lg hover:bg-white/10 transition-colors"
-            >
-              <X className="w-4 h-4 text-white/50" />
-            </button>
-          )}
+          {/* Always show close button */}
+          <button
+            onClick={() => setShowPermissionBanner(false)}
+            className="p-1.5 rounded-lg hover:bg-white/10 transition-colors"
+            title="Dismiss"
+          >
+            <X className="w-4 h-4 text-white/50" />
+          </button>
         </div>
       </div>
     </div>

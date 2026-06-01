@@ -372,11 +372,14 @@ export const usePlanetStore = create<PlanetState>((set, get) => ({
       updates.vegetation = Math.max(0, health.vegetation - decayRate);
     }
     
-    // Animals need vegetation and cleanliness
+    // Animals need vegetation and cleanliness - but buildings/humans hurt them
     if (health.animals > 5) {
       let decayRate = 0.5 * decayMultiplier;
       if (health.vegetation < 20) decayRate += 1.2 * decayMultiplier;
       if (health.cleanliness < 30) decayRate += 0.8 * decayMultiplier;
+      // Buildings/vegetation over 70% means too many humans - animals flee!
+      if (health.vegetation > 70) decayRate += 2.0 * decayMultiplier;
+      else if (health.vegetation > 50) decayRate += 1.0 * decayMultiplier;
       updates.animals = Math.max(0, health.animals - decayRate);
     }
     

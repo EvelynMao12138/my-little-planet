@@ -14,7 +14,7 @@ import { RandomEvents } from './components/UI/RandomEvents';
 import { SpeciesGallery } from './components/UI/SpeciesGallery';
 import { SpeciesPopup } from './components/UI/SpeciesPopup';
 import { SpeciesPanel } from './components/UI/SpeciesPanel';
-import { MobileHealthBar } from './components/UI/MobileHealthBar';
+import { MobileStatsPanel } from './components/UI/MobileStatsPanel';
 import { PermissionsManager } from './components/Permissions/PermissionsManager';
 import { RotateCcw, Volume2, BookOpen } from 'lucide-react';
 
@@ -208,10 +208,8 @@ function AppContent() {
           </aside>
         </div>
 
-        {/* Mobile: Bottom health bar */}
-        <div className="md:hidden fixed bottom-16 left-2 right-2 z-20">
-          <MobileHealthBar />
-        </div>
+        {/* Mobile: Stats panel with health bar */}
+        <MobileStatsPanel />
 
         <Toolbar />
         <AIGuide />
@@ -220,6 +218,7 @@ function AppContent() {
         <SpeciesPopup />
         <SpeciesGallery isOpen={showGallery} onClose={() => setShowGallery(false)} />
         <PermissionsManager />
+        <MobileStatsPanel />
       </div>
     </div>
   );
