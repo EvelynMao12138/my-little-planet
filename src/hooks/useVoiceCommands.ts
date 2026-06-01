@@ -58,7 +58,7 @@ export const useVoiceCommands = () => {
         showAIMessage('Voice: Listening... Say "make it rain", "add sun", etc.');
       };
 
-      recognition.onresult = (event: SpeechRecognitionEvent) => {
+      recognition.onresult = (event: any) => {
         const last = event.results.length - 1;
         const result = event.results[last][0].transcript.toLowerCase().trim();
         setTranscript(result);
@@ -82,7 +82,7 @@ export const useVoiceCommands = () => {
         }
       };
 
-      recognition.onerror = (event: SpeechRecognitionErrorEvent) => {
+      recognition.onerror = (event: any) => {
         console.error('Speech recognition error:', event.error);
         if (event.error === 'not-allowed') {
           showAIMessage('Voice: Microphone denied. Check permissions!');
