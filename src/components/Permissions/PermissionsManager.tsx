@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Camera, Mic, Check, X, AlertCircle } from 'lucide-react';
+import { Camera, Mic, X, AlertCircle } from 'lucide-react';
 import { usePlanetStore } from '@/contexts/PlanetContext';
 
 interface PermissionStatus {
@@ -8,7 +8,7 @@ interface PermissionStatus {
 }
 
 export function PermissionsManager() {
-  const { showAIMessage, setWebcamActive } = usePlanetStore();
+  const { showAIMessage } = usePlanetStore();
   const [permissions, setPermissions] = useState<PermissionStatus>({
     camera: 'pending',
     microphone: 'pending',
@@ -17,7 +17,6 @@ export function PermissionsManager() {
 
   useEffect(() => {
     const checkPermissions = async () => {
-      // Check camera permission
       try {
         if (navigator.permissions && navigator.permissions.query) {
           const cameraPermission = await navigator.permissions.query({ name: 'camera' as PermissionName });
@@ -26,23 +25,17 @@ export function PermissionsManager() {
           const micPermission = await navigator.permissions.query({ name: 'microphone' as PermissionName });
           setPermissions(prev => ({ ...prev, microphone: micPermission.state as 'granted' | 'denied' }));
 
-          // Listen for permission changes
           cameraPermission.onchange = () => {
             setPermissions(prev => ({ ...prev, camera: cameraPermission.state as 'granted' | 'denied' }));
           };
           micPermission.onchange = () => {
             setPermissions(prev => ({ ...prev, microphone: micPermission.state as 'granted' | 'denied' }));
           };
-        } else {
-          // Fallback: try to get media devices
-          setPermissions({ camera: 'pending', microphone: 'pending' });
         }
-      } catch (err) {
-        console.log('Permission check not supported');
+      } catch {
         setPermissions({ camera: 'pending', microphone: 'pending' });
       }
     };
-
     checkPermissions();
   }, []);
 
@@ -70,20 +63,31 @@ export function PermissionsManager() {
     }
   };
 
-  const bothGranted = permissions.camera === 'granted' && permissions.microphone === 'granted';
   const anyDenied = permissions.camera === 'denied' || permissions.microphone === 'denied';
 
   if (!showPermissionBanner) return null;
 
   return (
-    <div className="fixed top-2 sm:top-4 left-2 sm:left-1/2 sm:-translate-x-1/2 right-2 sm:right-auto z-50 animate-fadeIn">
-      <div className="bg-gradient-to-r from-gray-900/95 to-gray-800/95 backdrop-blur-lg rounded-xl sm:rounded-2xl border border-white/20 shadow-2xl p-3 sm:p-4">
-        <div className="flex items-start gap-2 sm:gap-4">
-          <div className="flex gap-2 sm:gap-3">
-            {/* Camera Status */}
+    <div className="fixed top-2 left-2 right-2 sm:left-1/2 sm:-translate-x-1/2 sm:right-auto sm:w-80 z-50 animate-fadeIn">
+      <div className="bg-gray-900/95 backdrop-blur-lg rounded-xl border border-white/20 shadow-2xl">
+        {/* Header with close button */}
+        <div className="flex items-center justify-between px-3 py-2 border-b border-white/10">
+          <span className="text-xs font-medium text-white">Permissions</span>
+          <button
+            onClick={() => setShowPermissionBanner(false)}
+            className="p-1 rounded hover:bg-white/10 transition-colors"
+          >
+            <X className="w-4 h-4 text-white/60" />
+          </button>
+        </div>
+        
+        {/* Content */}
+        <div className="p-3">
+          <div className="flex gap-3 justify-center">
+            {/* Camera Button */}
             <button
               onClick={requestCamera}
-              className={`flex flex-col items-center gap-0.5 sm:gap-1 p-2 sm:p-3 rounded-xl transition-all ${
+              className={`flex flex-col items-center gap-1 p-3 rounded-xl transition-all ${
                 permissions.camera === 'granted' 
                   ? 'bg-green-500/30 ring-2 ring-green-400' 
                   : permissions.camera === 'denied'
@@ -91,22 +95,22 @@ export function PermissionsManager() {
                   : 'bg-white/10 hover:bg-white/20'
               }`}
             >
-              <Camera className={`w-5 h-5 sm:w-6 sm:h-6 ${
+              <Camera className={`w-5 h-5 ${
                 permissions.camera === 'granted' ? 'text-green-400' 
                 : permissions.camera === 'denied' ? 'text-red-400' 
                 : 'text-white/60'
               }`} />
-              <span className="text-[8px] sm:text-[10px] font-medium">
-                {permissions.camera === 'granted' ? '✓' 
-                 : permissions.camera === 'denied' ? '✗'
-                 : ''}
+              <span className="text-[10px] font-medium text-white/80">
+                {permissions.camera === 'granted' ? 'Camera ✓' 
+                 : permissions.camera === 'denied' ? 'Camera ✗'
+                 : 'Camera'}
               </span>
             </button>
 
-            {/* Microphone Status */}
+            {/* Microphone Button */}
             <button
               onClick={requestMicrophone}
-              className={`flex flex-col items-center gap-0.5 sm:gap-1 p-2 sm:p-3 rounded-xl transition-all ${
+              className={`flex flex-col items-center gap-1 p-3 rounded-xl transition-all ${
                 permissions.microphone === 'granted' 
                   ? 'bg-green-500/30 ring-2 ring-green-400' 
                   : permissions.microphone === 'denied'
@@ -114,49 +118,25 @@ export function PermissionsManager() {
                   : 'bg-white/10 hover:bg-white/20'
               }`}
             >
-              <Mic className={`w-5 h-5 sm:w-6 sm:h-6 ${
+              <Mic className={`w-5 h-5 ${
                 permissions.microphone === 'granted' ? 'text-green-400' 
                 : permissions.microphone === 'denied' ? 'text-red-400' 
                 : 'text-white/60'
               }`} />
-              <span className="text-[8px] sm:text-[10px] font-medium">
-                {permissions.microphone === 'granted' ? '✓' 
-                 : permissions.microphone === 'denied' ? '✗'
-                 : ''}
+              <span className="text-[10px] font-medium text-white/80">
+                {permissions.microphone === 'granted' ? 'Mic ✓' 
+                 : permissions.microphone === 'denied' ? 'Mic ✗'
+                 : 'Mic'}
               </span>
             </button>
           </div>
-
-          <div className="flex-1">
-            <h3 className="text-sm font-medium text-white mb-1">Enable Features</h3>
-            <p className="text-xs text-white/60 leading-relaxed hidden sm:block">
-              Click each button to grant permissions for:
-            </p>
-            <div className="flex gap-2 mt-1.5">
-              <span className="text-[10px] px-2 py-0.5 bg-cyan-500/20 text-cyan-300 rounded-full">
-                🎥 Camera
-              </span>
-              <span className="text-[10px] px-2 py-0.5 bg-purple-500/20 text-purple-300 rounded-full">
-                🎤 Mic
-              </span>
+          
+          {anyDenied && (
+            <div className="flex items-center justify-center gap-1 mt-2 text-[10px] text-red-400">
+              <AlertCircle className="w-3 h-3" />
+              Some permissions denied
             </div>
-            
-            {anyDenied && (
-              <div className="flex items-center gap-1 mt-2 text-[10px] text-red-400">
-                <AlertCircle className="w-3 h-3" />
-                Some denied - features may not work
-              </div>
-            )}
-          </div>
-
-          {/* Always show close button */}
-          <button
-            onClick={() => setShowPermissionBanner(false)}
-            className="p-1.5 rounded-lg hover:bg-white/10 transition-colors"
-            title="Dismiss"
-          >
-            <X className="w-4 h-4 text-white/50" />
-          </button>
+          )}
         </div>
       </div>
     </div>
