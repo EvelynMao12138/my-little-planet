@@ -1,5 +1,6 @@
 import { useEffect, useRef, useCallback, useState } from 'react';
 import { usePlanetStore } from '@/contexts/PlanetContext';
+import type { SpeechRecognition, SpeechRecognitionEvent, SpeechRecognitionErrorEvent } from '@/types/speech';
 
 interface VoiceCommands {
   [key: string]: { action: string; message?: string };
@@ -36,8 +37,8 @@ export const useVoiceCommands = () => {
   const { voiceEnabled, setLastVoiceCommand, showAIMessage, applyAction } = usePlanetStore();
 
   const startListening = useCallback(() => {
-    const SpeechRecognitionAPI = (window as unknown as { SpeechRecognition?: typeof SpeechRecognition; webkitSpeechRecognition?: typeof SpeechRecognition }).SpeechRecognition 
-      || (window as unknown as { webkitSpeechRecognition?: typeof SpeechRecognition }).webkitSpeechRecognition;
+    const SpeechRecognitionAPI = (window as any).SpeechRecognition 
+      || (window as any).webkitSpeechRecognition;
 
     if (!SpeechRecognitionAPI) {
       showAIMessage('Voice: Use Chrome browser for voice commands!');
@@ -46,7 +47,7 @@ export const useVoiceCommands = () => {
     }
 
     try {
-      const recognition = new SpeechRecognitionAPI();
+      const recognition = new (SpeechRecognitionAPI as any)();
       recognition.continuous = true;
       recognition.interimResults = false;
       recognition.lang = 'en-US';
@@ -58,9 +59,9 @@ export const useVoiceCommands = () => {
         showAIMessage('Voice: Listening... Say "make it rain", "add sun", etc.');
       };
 
-      recognition.onresult = (event: any) => {
+      recognition.onresult = (event: SpeechRecognitionEvent) => {
         const last = event.results.length - 1;
-        const result = event.results[last][0].transcript.toLowerCase().trim();
+        const result = ((event.results[last][0] as unknown) as SpeechRecognitionAlternative).transcript.toLowerCase().trim();
         setTranscript(result);
         setLastVoiceCommand(result);
 
@@ -82,7 +83,7 @@ export const useVoiceCommands = () => {
         }
       };
 
-      recognition.onerror = (event: any) => {
+      recognition.onerror = (event: SpeechRecognitionErrorEvent) => {
         console.error('Speech recognition error:', event.error);
         if (event.error === 'not-allowed') {
           showAIMessage('Voice: Microphone denied. Check permissions!');

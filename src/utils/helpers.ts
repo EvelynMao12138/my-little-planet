@@ -1,4 +1,5 @@
 // Utility helper functions
+import * as THREE from 'three';
 
 export const lerp = (start: number, end: number, t: number): number => {
   return start + (end - start) * t;
@@ -58,7 +59,7 @@ export const worldToScreen = (
   width: number,
   height: number
 ): { x: number; y: number } => {
-  const vector = { x: position.x, y: position.y, z: position.z };
+  const vector = new THREE.Vector3(position.x, position.y, position.z);
   vector.project(camera);
   return {
     x: ((vector.x + 1) / 2) * width,

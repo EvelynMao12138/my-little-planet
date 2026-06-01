@@ -2,7 +2,7 @@ import { useRef, useMemo, useCallback, useState } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { OrbitControls, Stars } from '@react-three/drei';
 import * as THREE from 'three';
-import { usePlanetStore, animalSpecies, plantSpecies } from '@/contexts/PlanetContext';
+import { usePlanetStore, animalSpecies, plantSpecies, PlacedItem } from '@/contexts/PlanetContext';
 import { ParticleField } from '../Particles/ParticleField';
 import { RainEffect } from '../Particles/RainEffect';
 import { SunEffect } from '../Particles/SunEffect';
@@ -554,7 +554,7 @@ function AnimatedItem({ item, isSelected, pos, normal, quaternion, onSelect, sho
   const meshRef = useRef<THREE.Group>(null);
   
   // Generate random movement parameters based on item ID for unique per-animal movement
-  const idHash = item.id.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+  const idHash = item.id.split('').reduce((acc: number, char: string) => acc + char.charCodeAt(0), 0);
   const speed1 = 0.8 + (idHash % 10) * 0.2; // Speed between 0.8-1.8
   const speed2 = 0.6 + ((idHash * 7) % 10) * 0.15; // Different speed for 2nd axis
   const range1 = 0.08 + (idHash % 5) * 0.04; // Range 0.08-0.24
@@ -721,7 +721,7 @@ function Planet({ onClick }: { onClick: (point: THREE.Vector3, normal: THREE.Vec
     }
   });
 
-  const handleClick = useCallback((e: THREE.Event) => {
+  const handleClick = useCallback((e: { stopPropagation: () => void; point: THREE.Vector3 }) => {
     e.stopPropagation();
     const point = e.point as THREE.Vector3;
     const normal = point.clone().normalize();

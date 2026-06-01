@@ -4,7 +4,7 @@ import * as THREE from 'three';
 
 export function SunEffect() {
   const groupRef = useRef<THREE.Group>(null);
-  const raysRef = useRef<THREE.Mesh>(null);
+  const raysRef = useRef<THREE.LineSegments>(null!);
   
   const rayGeometry = useMemo(() => {
     const count = 12;

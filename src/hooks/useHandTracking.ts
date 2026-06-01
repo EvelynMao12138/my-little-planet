@@ -27,7 +27,7 @@ export const useHandTracking = () => {
         onResults: (callback: (results: { multiHandLandmarks?: { x: number; y: number; z: number }[][] }) => void) => void;
         send: (data: { image: HTMLVideoElement }) => Promise<void>;
       };
-      let Camera: new (video: HTMLVideoElement, options: Record<string, unknown>) => {
+      let Camera: new (video: HTMLVideoElement, options: any) => {
         start: () => Promise<void>;
         stop: () => void;
       };

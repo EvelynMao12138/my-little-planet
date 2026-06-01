@@ -273,6 +273,7 @@ export const usePlanetStore = create<PlanetState>((set, get) => ({
 
   setSoundMood: (mood) => set({ soundMood: mood }),
   toggleSound: () => set((state) => ({ soundEnabled: !state.soundEnabled })),
+  setMagicMode: (active: boolean) => set({ magicMode: active }),
 
   triggerMagic: () => {
     const now = Date.now();
