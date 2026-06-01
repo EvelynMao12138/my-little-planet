@@ -14,6 +14,7 @@ import { RandomEvents } from './components/UI/RandomEvents';
 import { SpeciesGallery } from './components/UI/SpeciesGallery';
 import { SpeciesPopup } from './components/UI/SpeciesPopup';
 import { SpeciesPanel } from './components/UI/SpeciesPanel';
+import { MobileHealthBar } from './components/UI/MobileHealthBar';
 import { PermissionsManager } from './components/Permissions/PermissionsManager';
 import { RotateCcw, Volume2, BookOpen } from 'lucide-react';
 
@@ -155,53 +156,61 @@ function AppContent() {
       
       <div className="relative h-full flex flex-col z-10">
         {/* Header */}
-        <header className="flex items-center justify-between p-3 bg-gradient-to-b from-black/40 to-transparent shrink-0">
-          <div className="flex items-center gap-3">
-            <div className={`w-9 h-9 rounded-full bg-gradient-to-br from-eco-green to-eco-blue flex items-center justify-center ${magicMode ? 'animate-bounce' : ''}`}>
-              <span className="text-lg">🌍</span>
+        <header className="flex items-center justify-between p-2 sm:p-3 bg-gradient-to-b from-black/40 to-transparent shrink-0">
+          <div className="flex items-center gap-2 sm:gap-3">
+            <div className={`w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-gradient-to-br from-eco-green to-eco-blue flex items-center justify-center ${magicMode ? 'animate-bounce' : ''}`}>
+              <span className="text-base sm:text-lg">🌍</span>
             </div>
-            <div>
-              <h1 className="font-display text-lg text-white drop-shadow-lg">My Planet</h1>
-              <p className="text-[10px] text-white/60">Balance the ecosystem</p>
+            <div className="hidden sm:block">
+              <h1 className="font-display text-base sm:text-lg text-white drop-shadow-lg">My Planet</h1>
+              <p className="text-[8px] sm:text-[10px] text-white/60">Balance the ecosystem</p>
             </div>
           </div>
 
-          <div className="flex items-center gap-2">
-            <button onClick={() => setShowGallery(true)} className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs transition-all ${unlockedSpecies.length > 0 ? 'bg-eco-purple/30 text-eco-purple hover:bg-eco-purple/40' : 'bg-white/10 text-white/50'}`}>
-              <BookOpen className="w-3.5 h-3.5" />
-              <span>{unlockedSpecies.length}</span>
+          <div className="flex items-center gap-1 sm:gap-2">
+            {/* Mobile: Info button */}
+            <button onClick={() => setShowGallery(true)} className={`flex items-center gap-1 sm:gap-1.5 px-1.5 sm:px-2.5 py-1 rounded-lg text-xs transition-all ${unlockedSpecies.length > 0 ? 'bg-eco-purple/30 text-eco-purple hover:bg-eco-purple/40' : 'bg-white/10 text-white/50'}`}>
+              <BookOpen className="w-3 h-3.5 sm:w-3.5 sm:w-3.5 h-3.5" />
+              <span className="hidden sm:inline">{unlockedSpecies.length}</span>
             </button>
             
             <VoiceControl />
-            <button onClick={toggleSound} className={`p-2 rounded-lg transition-all ${soundEnabled ? 'bg-white/20 text-white' : 'bg-white/10 text-white/50'}`}>
-              <Volume2 className="w-4 h-4" />
+            <button onClick={toggleSound} className={`p-1.5 sm:p-2 rounded-lg transition-all ${soundEnabled ? 'bg-white/20 text-white' : 'bg-white/10 text-white/50'}`}>
+              <Volume2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
             </button>
-            <button onClick={resetPlanet} className="p-2 rounded-lg bg-white/10 hover:bg-white/20 transition-all text-white/70 hover:text-white">
-              <RotateCcw className="w-4 h-4" />
+            <button onClick={resetPlanet} className="p-1.5 sm:p-2 rounded-lg bg-white/10 hover:bg-white/20 transition-all text-white/70 hover:text-white">
+              <RotateCcw className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
             </button>
           </div>
         </header>
 
         {/* Main Content */}
         <div className="flex-1 flex relative overflow-hidden">
-          <aside className="w-64 p-3 overflow-auto z-10">
+          {/* Desktop: Left sidebar */}
+          <aside className="hidden lg:block w-64 p-3 overflow-auto z-10">
             <InstructionsPanel />
           </aside>
 
           <main className="flex-1 relative z-0">
             <PlanetCanvas />
-            <div className="absolute top-3 left-1/2 -translate-x-1/2 px-3 py-1.5 bg-black/40 backdrop-blur-md rounded-full border border-white/20">
-              <p className="text-xs text-white/90">
+            <div className="absolute top-2 sm:top-3 left-1/2 -translate-x-1/2 px-2 sm:px-3 py-1 sm:py-1.5 bg-black/40 backdrop-blur-md rounded-full border border-white/20">
+              <p className="text-[10px] sm:text-xs text-white/90">
                 <span className="text-eco-green font-medium capitalize">{selectedTool}</span>
-                <span className="text-white/50 ml-2">(Click)</span>
+                <span className="text-white/50 ml-1 sm:ml-2">(Click)</span>
               </p>
             </div>
           </main>
 
-          <aside className="w-64 p-3 overflow-auto z-10 flex flex-col gap-3">
+          {/* Desktop: Right sidebar */}
+          <aside className="hidden md:block w-64 p-3 overflow-auto z-10 flex flex-col gap-3">
             <HealthPanel />
             <SpeciesPanel />
           </aside>
+        </div>
+
+        {/* Mobile: Bottom health bar */}
+        <div className="md:hidden fixed bottom-16 left-2 right-2 z-20">
+          <MobileHealthBar />
         </div>
 
         <Toolbar />

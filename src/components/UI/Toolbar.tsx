@@ -45,7 +45,7 @@ export function Toolbar() {
   };
 
   return (
-    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 to-transparent p-4">
+    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 to-transparent p-2 sm:p-4">
       {/* Webcam Help Modal */}
       {showWebcamHelp && (
         <div className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4" onClick={() => setShowWebcamHelp(false)}>
@@ -105,8 +105,8 @@ export function Toolbar() {
       )}
       
       {/* Gesture Status Bar */}
-      <div className="max-w-3xl mx-auto mb-4 flex items-center justify-between">
-        <div className="flex items-center gap-3">
+      <div className="max-w-3xl mx-auto mb-2 sm:mb-4 flex items-center justify-between">
+        <div className="hidden sm:flex items-center gap-3">
           {/* Status Indicator */}
           <div className={`flex items-center gap-2 px-3 py-1.5 rounded-full transition-all ${
             handTrackingEnabled 
@@ -139,16 +139,16 @@ export function Toolbar() {
         <div className="flex items-center gap-2">
           <button
             onClick={() => setShowWebcamHelp(true)}
-            className="p-2 rounded-lg bg-white/5 hover:bg-white/10 text-white/40 hover:text-white/60 transition-colors"
+            className="p-1.5 sm:p-2 rounded-lg bg-white/5 hover:bg-white/10 text-white/40 hover:text-white/60 transition-colors"
             title="Webcam help"
           >
-            <HelpCircle className="w-4 h-4" />
+            <HelpCircle className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
           </button>
           
           <button
             onClick={handleToggleHandTracking}
             disabled={isLoading}
-            className={`flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-medium transition-all ${
+            className={`flex items-center gap-1 sm:gap-2 px-2 sm:px-4 py-1.5 sm:py-2 rounded-lg text-[10px] sm:text-xs font-medium transition-all ${
               handTrackingEnabled
                 ? 'bg-cyan-500/40 text-cyan-300 ring-2 ring-cyan-400/50'
                 : 'bg-white/10 text-white/70 hover:bg-white/20 hover:text-white'
@@ -156,18 +156,18 @@ export function Toolbar() {
           >
             {isLoading ? (
               <>
-                <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                <span>Starting...</span>
+                <div className="w-3 h-3 sm:w-4 sm:h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                <span className="hidden sm:inline">Starting...</span>
               </>
             ) : handTrackingEnabled ? (
               <>
-                <Check className="w-4 h-4 text-green-400" />
-                <span>Camera On</span>
+                <Check className="w-3 h-3 sm:w-4 sm:h-4 text-green-400" />
+                <span className="hidden sm:inline">Camera On</span>
               </>
             ) : (
               <>
-                <Camera className="w-4 h-4" />
-                <span>Enable Camera</span>
+                <Camera className="w-3 h-3 sm:w-4 sm:h-4" />
+                <span className="hidden sm:inline">Enable Camera</span>
               </>
             )}
           </button>
@@ -175,28 +175,28 @@ export function Toolbar() {
       </div>
 
       {/* Action Toolbar */}
-      <div className="flex items-center justify-center gap-2 max-w-4xl mx-auto">
+      <div className="flex items-center justify-center gap-1 sm:gap-2 max-w-4xl mx-auto">
         {tools.map((tool) => (
           <button
             key={tool.id}
             onClick={() => setSelectedTool(tool.id)}
-            className={`group relative flex flex-col items-center px-4 py-3 rounded-xl transition-all ${
+            className={`group relative flex flex-col items-center px-2 sm:px-4 py-2 sm:py-3 rounded-xl transition-all ${
               selectedTool === tool.id
                 ? 'bg-white/20 ring-2 ring-white/30 shadow-lg'
                 : 'bg-white/5 hover:bg-white/10'
             }`}
           >
-            <span className={`mb-1 transition-colors ${
+            <span className={`mb-0.5 sm:mb-1 transition-colors ${
               selectedTool === tool.id ? 'text-white' : 'text-white/70 group-hover:text-white'
             }`}>
               {tool.icon}
             </span>
-            <span className={`text-xs font-medium transition-colors ${
+            <span className={`text-[8px] sm:text-xs font-medium transition-colors ${
               selectedTool === tool.id ? 'text-white' : 'text-white/50'
             }`}>
               {tool.label}
             </span>
-            <span className="absolute -top-1 -right-1 px-1.5 py-0.5 text-[10px] font-mono bg-white/20 rounded text-white/60">
+            <span className="absolute -top-1 -right-1 px-1 py-0.5 text-[8px] sm:text-[10px] font-mono bg-white/20 rounded text-white/60 hidden sm:inline">
               {tool.shortcut}
             </span>
           </button>
